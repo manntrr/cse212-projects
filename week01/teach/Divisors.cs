@@ -21,7 +21,7 @@ public static class Divisors
     private static List<int> FindDivisors(int number)
     {
         List<int> results = new();
-        int max = number;
+        int max = number / 2;
         results.Add(1);
         int current = 2;
         while (current < max)
