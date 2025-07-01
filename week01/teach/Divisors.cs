@@ -33,6 +33,10 @@ public static class Divisors
             }
             current += 1;
         }
+        for (int index = results.Count; index > 1; index--)
+        {
+            results.Add(number / results[index - 1]);
+        }
         return results;
     }
 }
