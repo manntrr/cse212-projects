@@ -70,14 +70,24 @@ public static class Arrays
         // be implemented by another person.
 
         ///   Create and Assign to the result list the slice of data from the results of the GetRange Function for the data beginning at amount to the end of the data list.
-        List<int> result = data.GetRange(amount, data.Count - 1);
+        ///   ***   based on errors and review in debug mode, I had to adjust the logic here to get the correct range,
+        ///   starting the slice at the data list index representing the left most index to get the full amount of
+        ///   elements matching the count of amount, then fixing the count to that same amount.
+        List<int> result = data.GetRange(data.Count - amount, amount);
         ///   Create a for loop that starts at 0 and goes to amount - 1 using i as the index
-        for (int i = 0; i < amount; i++)
+        ///   ***  based on errors and review in debug mode, I had to adjust the logic here to get the correct range,
+        ///   the start point remainded the same, where the count needed to change to the remainder of elements not
+        ///   already retrieved in the first slice.
+        foreach (int i in data.GetRange(0, data.Count - amount))
         {
-            ///  add the element of data at index i to the end of the result list
-            result.Add(data[i]);
+            ///   Inside the for loop, add the element of data at index i to the end of the result list
+            result.Add(i);
         }
         ///   set data to the result
-        data = result;
+        ///   ***  Based on errors and review in debug mode, I had to adjust the method of transfering data to the original
+        ///   list.  My plan of just assigning the object did not pass back out of the function, so instead I changed to a
+        ///   clean and copy results into the parameter variable in order to return the results as expected by the test cases.
+        data.Clear();
+        data.AddRange(result);
     }
 }
