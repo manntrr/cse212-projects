@@ -10,6 +10,8 @@
 public class TakingTurnsQueue
 {
     private readonly PersonQueue _people = new();
+    //  added to fix the ability to track the unlimited turns players.
+    private readonly List<string> _unlimited = new();
 
     public int Length => _people.Length;
 
@@ -22,6 +24,12 @@ public class TakingTurnsQueue
     {
         var person = new Person(name, turns);
         _people.Enqueue(person);
+        //  added to fix the ability to track the unlimited turns players.  "turns == 0"
+        //  changed to "turns <= 0" to handle negative valued unlimited players
+        if (turns <= 0)
+        {
+            _unlimited.Add(name);
+        }
     }
 
     /// <summary>
@@ -45,7 +53,12 @@ public class TakingTurnsQueue
                 person.Turns -= 1;
                 _people.Enqueue(person);
             }
-
+            //  added to fix the ability to track the unlimited turns players.
+            //  added "person.Turns < 1 &&" clause to handle negative valued unlimited players
+            else if (person.Turns < 1 && _unlimited.Contains(person.Name))
+            {
+                _people.Enqueue(person);
+            }
             return person;
         }
     }
