@@ -13,7 +13,8 @@ public class PersonQueue
     /// <param name="person">The person to add</param>
     public void Enqueue(Person person)
     {
-        // fix for test case 1, to add the person to the back of the queue instead of the front of the queue.
+        // fix to add the person to the back of the queue instead of the front of the queue.
+        // ref:  TestTakingTurnsQueue_FiniteRepetition test case
         //_queue.Insert(0, person);
         _queue.Add(person);
     }

@@ -17,6 +17,7 @@ public class PriorityQueueTests
     // Scenario: The Enqueue function shall add an item (which contains both data and priority) to the back of the queue.
     // Expected Result: the item can be dequeued back off the queue becuase it was in the queue.
     // Defect(s) Found: 
+    //   None
     public void TestPriorityQueue_Enqueue()
     {
         var priorityQueue = new PriorityQueue();
@@ -34,8 +35,11 @@ public class PriorityQueueTests
     // Expected Result: ["a", "b", "c", "d", "e"]
     // Defect(s) Found: 
     //   not searching from the beggining of the list to find the highest priority
+    //   ref: class PriorityQueue ==> method string Dequeue()
     //   not keeping the first instance index of the highest priority
+    //   ref: class PriorityQueue ==> method string Dequeue()
     //   not removing the dequeued item from the list
+    //   ref: class PriorityQueue ==> method string Dequeue()
     public void TestPriorityQueue_Dequeue_Equal_Pri()
     {
         var priorityQueue = new PriorityQueue();
@@ -58,6 +62,7 @@ public class PriorityQueueTests
     // Expected Result: ["e", "b", "d", "a", "c"]
     // Defect(s) Found: 
     //   not searching to the end of the list to find the highest priority
+    //   ref: class PriorityQueue ==> method string Dequeue()
     public void TestPriorityQueue_Dequeue_Mixed_Pri()
     {
         var priorityQueue = new PriorityQueue();
@@ -77,6 +82,7 @@ public class PriorityQueueTests
     // Scenario: If the queue is empty, then an error exception shall be thrown.
     // Expected Result: InvalidOperationException exception shall be thrown
     // Defect(s) Found: 
+    //   none
     public void TestPriorityQueue_Dequeue_Empty()
     {
         var priorityQueue = new PriorityQueue();
