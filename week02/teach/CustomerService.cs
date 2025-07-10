@@ -120,12 +120,13 @@ public class CustomerService
     private void AddNewCustomer()
     {
         // Verify there is room in the service queue
-        // need to valid for the maxsize not only over max size.
+        // need to valid for the maxsize not only over max size and throw an error if the attempt exceeeds max size.
         //if (_queue.Count > _maxSize)
         if (_queue.Count >= _maxSize)
         {
             Console.WriteLine("Maximum Number of Customers in Queue.");
-            return;
+            //return;
+            throw new InvalidOperationException("Add New Customer called on a Customer Queue that is Full!");
         }
 
         Console.Write("Customer Name: ");
@@ -145,8 +146,14 @@ public class CustomerService
     /// </summary>
     private void ServeCustomer()
     {
-        _queue.RemoveAt(0);
-        var customer = _queue[0];
+        // need to validate the queue is not empty and throw an error if it is.
+        if (_queue.Count == 0)
+        {
+            throw new InvalidOperationException("Serve Customer called on a Customer Queue that is Empty!");
+        }
+        // need to correct the dequeue to be the last customer added, also need to retrieve the customer before removing it.
+        var customer = _queue[_queue.Count - 1];
+        _queue.RemoveAt(_queue.Count - 1);
         Console.WriteLine(customer);
     }
 
