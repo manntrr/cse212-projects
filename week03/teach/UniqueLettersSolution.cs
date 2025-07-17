@@ -45,4 +45,5 @@
         var unique = new HashSet<char>(text);
         return unique.Count == text.Length;
     }
+    public static bool TestAreUniqueLetters(string text) => AreUniqueLetters(text);
 }

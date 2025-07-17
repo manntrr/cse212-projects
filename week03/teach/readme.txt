@@ -1,0 +1,1 @@
+needed to run the following in the same path as the project file in order to allow NUnit testing

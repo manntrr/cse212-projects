@@ -1,6 +1,4 @@
-﻿using NUnit.Framework.Internal;
-
-public static class UniqueLetters
+﻿public static class UniqueLettersTRM
 {
     public static void Run()
     {
@@ -20,6 +18,7 @@ public static class UniqueLetters
     private static bool AreUniqueLetters(string text)
     {
         // TODO Problem 1 - Replace the O(n^2) algorithm to use sets and O(n) efficiency
+        /*
         for (var i = 0; i < text.Length; ++i)
         {
             for (var j = 0; j < text.Length; ++j)
@@ -29,7 +28,10 @@ public static class UniqueLetters
                     return false;
             }
         }
-
+        /**/
+        HashSet<char> unique = [];
+        foreach (char character in text)
+            if (!unique.Add(character)) return false;
         return true;
     }
     public static bool TestAreUniqueLetters(string text) => AreUniqueLetters(text);

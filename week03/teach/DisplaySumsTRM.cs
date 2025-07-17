@@ -1,4 +1,4 @@
-﻿public static class DisplaySums
+﻿public static class DisplaySumsTRM
 {
     public static void Run()
     {
@@ -31,7 +31,28 @@
     /// <param name="numbers">array of integers</param>
     private static void DisplaySumPairs(int[] numbers)
     {
-        // TODO Problem 2 - This should print pairs of numbers in the given array
+        HashSet<int> numberSet = [];
+        foreach (int number in numbers) numberSet.Add(number);
+        Dictionary<int, int> pairsSet = [];
+        foreach (int number in numbers)
+        {
+            int smaller, larger;
+            if ((10 - number) > number)
+            {
+                smaller = number;
+                larger = 10 - number;
+            }
+            else
+            {
+                smaller = 10 - number;
+                larger = number;
+            }
+            if (smaller != larger && !pairsSet.ContainsKey(smaller) && numberSet.Contains(smaller) && numberSet.Contains(larger)) pairsSet.Add(smaller, larger);
+        }
+        foreach (int key in pairsSet.Keys)
+        {
+            Console.WriteLine(key.ToString() + " " + pairsSet[key].ToString());
+        }
     }
     public static void TestDisplaySumPairs(int[] numbers) => DisplaySumPairs(numbers);
 }
