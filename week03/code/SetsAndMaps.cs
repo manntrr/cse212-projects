@@ -45,13 +45,13 @@ public static class SetsAndMaps
     /// <returns>fixed array of divisors</returns>
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
-        var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename))
+        Dictionary<string, int> degrees = [];
+        foreach (string line in File.ReadLines(filename))
         {
-            var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            string[] fields = line.Split(",");
+            if (degrees.ContainsKey(fields[3])) degrees[fields[3]]++;
+            else degrees.Add(fields[3], 1);
         }
-
         return degrees;
     }
 
