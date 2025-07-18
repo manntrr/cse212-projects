@@ -1,4 +1,5 @@
 using System.Text.Json;
+using NUnit.Framework;
 
 public static class SetsAndMaps
 {
@@ -73,8 +74,44 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        Dictionary<char, int> letters = [];
+        int counter = 0;
+        int index = 0;
+        string shorterWord, longerWord;
+        if (word1.Length == int.Min(word1.Length, word2.Length))
+        {
+            shorterWord = word1;
+            longerWord = word2;
+        }
+        else
+        {
+            shorterWord = word2;
+            longerWord = word1;
+        }
+        foreach (char character in longerWord)
+        {
+            char letter = Char.ToLower(character);
+            if (!Char.IsWhiteSpace(letter))
+            {
+                if (letters.TryGetValue(letter, out int value)) letters[letter] = ++value;
+                else letters.Add(letter, 1);
+                if (letters[letter] == 0) counter--;
+                else if (letters[letter] == 1) counter++;
+            }
+            if (index < shorterWord.Length)
+            {
+                letter = Char.ToLower(shorterWord[index]);
+                if (!Char.IsWhiteSpace(letter))
+                {
+                    if (letters.TryGetValue(letter, out int value)) letters[letter] = --value;
+                    else letters.Add(letter, -1);
+                    if (letters[letter] == 0) counter--;
+                    else if (letters[letter] == -1) counter++;
+                }
+            }
+            index++;
+        }
+        return counter == 0;
     }
 
     /// <summary>
@@ -93,21 +130,26 @@ public static class SetsAndMaps
     /// </summary>
     public static string[] EarthquakeDailySummary()
     {
-        const string uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
-        using var client = new HttpClient();
-        using var getRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
-        using var jsonStream = client.Send(getRequestMessage).Content.ReadAsStream();
-        using var reader = new StreamReader(jsonStream);
-        var json = reader.ReadToEnd();
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-        var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
-
+        const String uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+        using HttpClient client = new();
+        using HttpRequestMessage getRequestMessage = new(HttpMethod.Get, uri);
+        using Stream jsonStream = client.Send(getRequestMessage).Content.ReadAsStream();
+        using StreamReader reader = new(jsonStream);
+        String json = reader.ReadToEnd();
+        JsonSerializerOptions options = new() { PropertyNameCaseInsensitive = true };
+        FeatureCollection featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
+        List<String> earthquakes = [];
+        foreach (Feature feature in featureCollection.features)
+        {
+            String earthquake = feature.properties.place + " - Mag " + feature.properties.mag.ToString();
+            Console.WriteLine(earthquake);
+            earthquakes.Add(earthquake);
+        }
+        return earthquakes.ToArray<String>();
         // TODO Problem 5:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
     }
 }

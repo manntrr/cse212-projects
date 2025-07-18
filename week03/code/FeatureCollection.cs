@@ -1,5 +1,6 @@
 public class FeatureCollection
 {
-    // TODO Problem 5 - ADD YOUR CODE HERE
-    // Create additional classes as necessary
+    public Metadata metadata { get; set; }
+    public Bbox bbox { get; set; }
+    public Features features { get; set; }
 }
