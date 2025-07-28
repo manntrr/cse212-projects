@@ -132,7 +132,7 @@ public class WildcardBinaryTests
     public void WildcardBinary_6_Long()
     {
         var results = new List<string>();
-        Recursion.WildcardBinary("110*0*", results);
+        Recursion.WildcardBinary("110*0*", ref results);
 
         results.Sort();
         var expected = new List<string> {
@@ -148,7 +148,7 @@ public class WildcardBinaryTests
     public void WildcardBinary_EmptyString()
     {
         var results = new List<string>();
-        Recursion.WildcardBinary("", results);
+        Recursion.WildcardBinary("", ref results);
 
         var expected = new List<string> { "" };
         CollectionAssert.AreEqual(expected, results);
@@ -158,7 +158,7 @@ public class WildcardBinaryTests
     public void WildcardBinary_NoWildcards()
     {
         var results = new List<string>();
-        Recursion.WildcardBinary("101010101100", results);
+        Recursion.WildcardBinary("101010101100", ref results);
 
         var expected = new List<string> { "101010101100" };
         CollectionAssert.AreEqual(expected, results);
@@ -168,7 +168,7 @@ public class WildcardBinaryTests
     public void WildcardBinary_3_Long()
     {
         var results = new List<string>();
-        Recursion.WildcardBinary("***", results);
+        Recursion.WildcardBinary("***", ref results);
 
         results.Sort();
         var expected = new List<string> {

@@ -14,8 +14,8 @@ public static class Recursion
     /// </summary>
     public static int SumSquaresRecursive(int n)
     {
-        // TODO Start Problem 1
-        return 0;
+        if (n == 1) return 1;
+        else return SumSquaresRecursive(n - 1) + (n * n);
     }
 
     /// <summary>
@@ -37,9 +37,49 @@ public static class Recursion
     /// You can assume that the size specified is always valid (between 1 
     /// and the length of the letters list).
     /// </summary>
-    public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
+    public static void PermutationsChoose(List<string> results, string letters, int size, string word = "", Dictionary<KeyValuePair<string, int>, List<string>>? memory = null)
     {
-        // TODO Start Problem 2
+        if (results is null) results = [];
+        if (memory is null) memory = [];
+        KeyValuePair<string, int> key = new(word, size);
+        if (memory.ContainsKey(key))
+        {
+            results = memory[key];
+        }
+        else
+        {
+            if (word == "" && size == 1)
+            {
+                foreach (char character in letters)
+                {
+                    results.Add(character.ToString());
+                }
+            }
+            else if (size == 1)
+            {
+                foreach (char character in letters)
+                {
+                    if (!word.Contains(character)) results.Add(character.ToString());
+                }
+            }
+            else
+            {
+                foreach (char character in letters)
+                {
+                    if (!word.Contains(character))
+                    {
+                        string newWord = word + character.ToString();
+                        List<string> subResults = new();
+                        PermutationsChoose(subResults, letters, size - 1, newWord, memory);
+                        foreach (string result in subResults)
+                        {
+                            if (!result.Contains(character.ToString())) results.Add(character.ToString() + result);
+                        }
+                    }
+                }
+            }
+        }
+        memory.Add(key, results);
     }
 
     /// <summary>
@@ -95,11 +135,11 @@ public static class Recursion
             return 2;
         if (s == 3)
             return 4;
-
-        // TODO Start Problem 3
-
-        // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        if (remember is null) remember = [];
+        if (remember.ContainsKey(s))
+            return remember[s];
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember.Add(s, ways);
         return ways;
     }
 
@@ -116,9 +156,45 @@ public static class Recursion
     /// Using recursion, insert all possible binary strings for a given pattern into the results list.  You might find 
     /// some of the string functions like IndexOf and [..X] / [X..] to be useful in solving this problem.
     /// </summary>
-    public static void WildcardBinary(string pattern, List<string> results)
+    public static void WildcardBinary(string pattern, ref List<string> results, Dictionary<string, List<string>>? memory = null)
     {
-        // TODO Start Problem 4
+        if (results is null) results = [];
+        if (memory is null) memory = [];
+        if (pattern == "")
+        {
+            results = [""];
+            return;
+        }
+        else if (!pattern.Contains('*'))
+        {
+            results = [pattern];
+            return;
+        }
+        else if (pattern == "*")
+        {
+            results = ["0", "1"];
+        }
+        else
+        {
+            int firstWildCard = pattern.IndexOf("*");
+            string preWild = pattern[..firstWildCard];
+            string postWild = pattern[(firstWildCard + 1)..];
+            List<string> subResults = [];
+            WildcardBinary(postWild == "" ? "*" : postWild, ref subResults, memory);
+            foreach (string result in subResults)
+            {
+                if (postWild == "")
+                {
+                    results.Add(preWild + result);
+                }
+                else
+                {
+                    results.Add(preWild + "0" + result);
+                    results.Add(preWild + "1" + result);
+                }
+            }
+        }
+        memory.Add(pattern, results);
     }
 
     /// <summary>
@@ -129,15 +205,35 @@ public static class Recursion
     {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null) {
+        if (currPath == null)
+        {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
-
-        // TODO Start Problem 5
-        // ADD CODE HERE
-
-        // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+        if (maze.IsValidMove(currPath, x, y) && maze.IsEnd(x, y))
+        {
+            currPath.Add((x, y)); // Use this syntax to add to the current path
+            results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+        }
+        else if (maze.IsValidMove(currPath, x, y))
+        {
+            currPath.Add((x, y)); // Use this syntax to add to the current path
+            List<ValueTuple<int, int>>? nextPath = new(currPath);
+            SolveMaze(results, maze, x, y + 1, nextPath);
+            //nextPath = new(currPath);
+            //SolveMaze(results, maze, x + 1, y + 1, nextPath);
+            nextPath = new(currPath);
+            SolveMaze(results, maze, x + 1, y, nextPath);
+            //nextPath = new(currPath);
+            //SolveMaze(results, maze, x + 1, y - 1, nextPath);
+            nextPath = new(currPath);
+            SolveMaze(results, maze, x, y - 1, nextPath);
+            //nextPath = new(currPath);
+            //SolveMaze(results, maze, x - 1, y - 1, nextPath);
+            nextPath = new(currPath);
+            SolveMaze(results, maze, x - 1, y, nextPath);
+            //nextPath = new(currPath);
+            //SolveMaze(results, maze, x - 1, y + 1, nextPath);
+            //SolveMaze(results, maze, x - 1, y + 1, nextPath);
+        }
     }
 }
