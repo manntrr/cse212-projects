@@ -158,43 +158,48 @@ public static class Recursion
     /// </summary>
     public static void WildcardBinary(string pattern, List<string> results, Dictionary<string, List<string>>? memory = null)
     {
-        if (results is null) results = [];
         if (memory is null) memory = [];
-        if (pattern == "")
+        if (memory.ContainsKey(pattern))
         {
-            results = [""];
-            return;
-        }
-        else if (!pattern.Contains('*'))
-        {
-            results = [pattern];
-            return;
-        }
-        else if (pattern == "*")
-        {
-            results = ["0", "1"];
+            foreach (String result in memory[pattern]) results.Add(result);
         }
         else
         {
-            int firstWildCard = pattern.IndexOf("*");
-            string preWild = pattern[..firstWildCard];
-            string postWild = pattern[(firstWildCard + 1)..];
-            List<string> subResults = [];
-            WildcardBinary(postWild == "" ? "*" : postWild, ref subResults, memory);
-            foreach (string result in subResults)
+            if (pattern == "")
             {
-                if (postWild == "")
+                results.Add("");
+            }
+            else if (!pattern.Contains('*'))
+            {
+                results.Add(pattern);
+            }
+            else if (pattern == "*")
+            {
+                results.Add("0");
+                results.Add("1");
+            }
+            else
+            {
+                int firstWildCard = pattern.IndexOf("*");
+                string preWild = pattern[..firstWildCard];
+                string postWild = pattern[(firstWildCard + 1)..];
+                List<string> subResults = [];
+                WildcardBinary(postWild == "" ? "*" : postWild, subResults, memory);
+                foreach (string result in subResults)
                 {
-                    results.Add(preWild + result);
-                }
-                else
-                {
-                    results.Add(preWild + "0" + result);
-                    results.Add(preWild + "1" + result);
+                    if (postWild == "")
+                    {
+                        results.Add(preWild + result);
+                    }
+                    else
+                    {
+                        results.Add(preWild + "0" + result);
+                        results.Add(preWild + "1" + result);
+                    }
                 }
             }
+            memory.Add(pattern, results);
         }
-        memory.Add(pattern, results);
     }
 
     /// <summary>
