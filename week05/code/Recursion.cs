@@ -156,7 +156,7 @@ public static class Recursion
     /// Using recursion, insert all possible binary strings for a given pattern into the results list.  You might find 
     /// some of the string functions like IndexOf and [..X] / [X..] to be useful in solving this problem.
     /// </summary>
-    public static void WildcardBinary(string pattern, ref List<string> results, Dictionary<string, List<string>>? memory = null)
+    public static void WildcardBinary(string pattern, List<string> results, Dictionary<string, List<string>>? memory = null)
     {
         if (results is null) results = [];
         if (memory is null) memory = [];
