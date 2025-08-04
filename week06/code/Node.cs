@@ -21,7 +21,8 @@ public class Node
             else
                 Left.Insert(value);
         }
-        else
+        // add else case to test greater in order to add this to the tree, otherwise it is a duplicate and do nothing
+        else if (value > Data)
         {
             // Insert to the right
             if (Right is null)
@@ -33,13 +34,28 @@ public class Node
 
     public bool Contains(int value)
     {
-        // TODO Start Problem 2
-        return false;
+        if ((Left is null && Right is null) || Data == value)
+        {
+            return Data == value;
+        }
+        else if (Left is not null && value < Data)
+        {
+            // search the left
+            return Left.Contains(value);
+        }
+        else if (Right is not null)
+        {
+            // search the right
+            return Right.Contains(value);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public int GetHeight()
     {
-        // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        return int.Max(Left is null ? 0 : Left.GetHeight(), Right is null ? 0 : Right.GetHeight()) + 1;
     }
 }

@@ -1,3 +1,6 @@
+using System.Runtime.ExceptionServices;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 public static class Trees
 {
     /// <summary>
@@ -48,6 +51,47 @@ public static class Trees
     /// <param name="bst">the BinarySearchTree in which to insert the values</param>
     private static void InsertMiddle(int[] sortedNumbers, int first, int last, BinarySearchTree bst)
     {
-        // TODO Start Problem 5
+        if (sortedNumbers.Length > 1)
+        {
+            int range = last - first;
+            int halfSize = range / 2;
+            int midpoint = first + halfSize;
+            bst.Insert(sortedNumbers[midpoint]);
+            int[] preSortedNumbers, postSortedNumbers;
+            if (midpoint == 0)
+            {
+                if (last == 1)
+                {
+                    postSortedNumbers = [sortedNumbers[1]];
+                }
+                else
+                {
+                    postSortedNumbers = sortedNumbers[1..last];
+                }
+                InsertMiddle(postSortedNumbers, 0, last - 1, bst);
+            }
+            else
+            {
+                int preMiddle = midpoint - 1;
+                int postMiddle = midpoint + 1;
+                preSortedNumbers = sortedNumbers[0..(preMiddle + 1)];
+                InsertMiddle(preSortedNumbers, first, preMiddle, bst);
+                if (postMiddle == last)
+                {
+                    postSortedNumbers = [sortedNumbers[last]];
+                }
+                else
+                {
+                    postSortedNumbers = sortedNumbers[postMiddle..(last + 1)];
+                }
+                InsertMiddle(postSortedNumbers, 0, last - postMiddle, bst);
+
+            }
+        }
+        else if (sortedNumbers.Length > 0)
+        {
+            bst.Insert(sortedNumbers[0]);
+        }
     }
+
 }
